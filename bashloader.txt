@@ -1,0 +1,9 @@
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
+ZSH_THEME="powerlevel10k/powerlevel10k"
+
+# Sourcing all .sh files in $HOME/.custom
+for file in $HOME/.custom/*.zsh; do
+  if [ -r "$file" ]; then
+    source "$file"
+  fi
+done

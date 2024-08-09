@@ -122,6 +122,32 @@ install_docker() {
         fi
 }
 
+install_tpm() {
+    # Define the TPM directory
+    local tpm_dir="$HOME/.tmux/plugins/tpm"
+    
+    # Check if TPM is already installed
+    if [ -d "$tpm_dir" ]; then
+        echo "TPM is already installed at $tpm_dir."
+    else
+        # Clone the TPM repository to the specified directory
+        echo "Installing TPM..."
+        git clone https://github.com/tmux-plugins/tpm "$tpm_dir"
+        
+        # Check if the installation was successful
+        if [ -d "$tpm_dir" ]; then
+            echo "TPM installed successfully."
+        else
+            echo "Failed to install TPM."
+        fi
+
+        git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+        git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+        git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+    fi
+}
+
+
 # Function to install Nerd Fonts
 install_nerd_fonts() {
     local font="$1"
@@ -164,11 +190,13 @@ install_package "neovim" "nvim"
 install_package "tmux" "tmux"
 install_package "1password-cli" "op"
 install_package "git" "git"
+install_package "fonts-font-awesome" "fonts-font-awesome"
 install_nvm
 install_docker
 install_nerd_fonts "JetBrainsMono"
 install_nerd_fonts "MartianMono"
 install_nerd_fonts "ProFont"
 install_nerd_fonts "ZedMono"
+install_tpm
 
 echo "All specified applications have been checked and installed if necessary."
