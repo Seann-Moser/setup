@@ -5,12 +5,12 @@ TMUX_SRC_DIR := ./tmux
 TMUX_DEST_DIR := $(HOME)/.config/tmux
 
 ENV_SRC_DIR := ./env
-ENV_DEST_DIR := $(HOME)/.custom
+ENV_DEST_DIR := $(HOME)/.oh-my-zsh/custom
 
 CUSTOM_DIR := $(HOME)/.custom
 BASHRC := $(HOME)/.zshrc
 # Target to copy files and remove old config
-update-config: clean-config copy-config update-bashrc
+update-config: clean-config copy-config refresh#update-bashrc
 
 # Target to remove the old configuration directories if they exist
 clean-config:
@@ -28,7 +28,7 @@ clean-config:
 	fi
 	@if [ -d "$(ENV_DEST_DIR)" ]; then \
 		echo "Removing old environment files at $(ENV_DEST_DIR)..."; \
-		rm -rf $(ENV_DEST_DIR); \
+		rm -rf $(ENV_DEST_DIR)/*.zsh; \
 	else \
 		echo "No existing environment files to remove."; \
 	fi
@@ -46,6 +46,7 @@ copy-config:
 	@mkdir -p $(ENV_DEST_DIR)
 	@cp -r $(ENV_SRC_DIR)/* $(ENV_DEST_DIR)
 	@echo "Environment files copied from $(ENV_SRC_DIR) to $(ENV_DEST_DIR)."
+
 
 
 # Target to update .bashrc with the source loop
@@ -66,4 +67,4 @@ update-bashrc:
 
 
 # Default target
-.PHONY: update-config clean-config copy-config update-bashrc
+.PHONY: update-config clean-config copy-config update-bashrc refresh
