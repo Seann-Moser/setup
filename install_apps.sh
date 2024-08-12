@@ -244,3 +244,5 @@ install_tpm
 install_terminal
 
 echo "All specified applications have been checked and installed if necessary."
+
+make update-config
