@@ -86,6 +86,49 @@ install_nvm() {
     fi
 }
 
+install_terminal() {
+    # Determine the operating system
+    OS=$(uname)
+
+    if [[ "$OS" == "Linux" ]]; then
+        # Check if kitty is already installed
+        if ! command -v kitty &> /dev/null; then
+            echo "Kitty is not installed. Installing now..."
+            curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
+
+            # Setup desktop integration for kitty after installation
+            echo "Setting up desktop integration for Kitty..."
+            ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten ~/.local/bin/
+            cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/
+            cp ~/.local/kitty.app/share/applications/kitty-open.desktop ~/.local/share/applications/
+            sed -i "s|Icon=kitty|Icon=$(readlink -f ~)/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop
+            sed -i "s|Exec=kitty|Exec=$(readlink -f ~)/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
+            echo 'kitty.desktop' > ~/.config/xdg-terminals.list
+        else
+            echo "Kitty is already installed. Setting up desktop integration..."
+
+            # Setup desktop integration for kitty if it is already installed
+            ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten ~/.local/bin/
+            cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/
+            cp ~/.local/kitty.app/share/applications/kitty-open.desktop ~/.local/share/applications/
+            sed -i "s|Icon=kitty|Icon=$(readlink -f ~)/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop
+            sed -i "s|Exec=kitty|Exec=$(readlink -f ~)/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
+            echo 'kitty.desktop' > ~/.config/xdg-terminals.list
+        fi
+    elif [[ "$OS" == "Darwin" ]]; then
+        # Check if iTerm2 is already installed
+        if ! command -v iterm2 &> /dev/null && ! [ -d "/Applications/iTerm.app" ]; then
+            echo "iTerm2 is not installed. Installing now..."
+            brew install --cask iterm2
+        else
+            echo "iTerm2 is already installed."
+        fi
+    else
+        echo "Unsupported operating system. Skipping terminal installation."
+    fi
+}
+
+
 # Function to install Docker
 install_docker() {
     if ! command -v docker &> /dev/null; then
@@ -125,7 +168,7 @@ install_docker() {
 install_tpm() {
     # Define the TPM directory
     local tpm_dir="$HOME/.tmux/plugins/tpm"
-    
+
     # Check if TPM is already installed
     if [ -d "$tpm_dir" ]; then
         echo "TPM is already installed at $tpm_dir."
@@ -133,7 +176,7 @@ install_tpm() {
         # Clone the TPM repository to the specified directory
         echo "Installing TPM..."
         git clone https://github.com/tmux-plugins/tpm "$tpm_dir"
-        
+
         # Check if the installation was successful
         if [ -d "$tpm_dir" ]; then
             echo "TPM installed successfully."
@@ -190,7 +233,7 @@ install_package "neovim" "nvim"
 install_package "tmux" "tmux"
 install_package "1password-cli" "op"
 install_package "git" "git"
-install_package "fonts-font-awesome" "fonts-font-awesome"
+# install_package "fonts-font-awesome" "fonts-font-awesome"
 install_nvm
 install_docker
 install_nerd_fonts "JetBrainsMono"
@@ -198,5 +241,6 @@ install_nerd_fonts "MartianMono"
 install_nerd_fonts "ProFont"
 install_nerd_fonts "ZedMono"
 install_tpm
+install_terminal
 
 echo "All specified applications have been checked and installed if necessary."
