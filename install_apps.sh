@@ -233,6 +233,8 @@ install_package "neovim" "nvim"
 install_package "tmux" "tmux"
 install_package "1password-cli" "op"
 install_package "git" "git"
+install_package "libnotify-bin" "notify-send"
+
 # install_package "fonts-font-awesome" "fonts-font-awesome"
 install_nvm
 install_docker

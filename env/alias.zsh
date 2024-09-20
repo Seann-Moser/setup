@@ -3,6 +3,8 @@ alias nv="nvim"
 # Filepath
 alias cdp='cd ~/projects/github.com/'
 alias cds='cd ~/go/src/github.com/Seann-Moser'
+alias cdh='cd ~/go/src/github.com/HiroCloud'
+alias cdhf='cd ~/go/src/github.com/HiroCloud/k8s-flux'
 
 alias runAccess='chmod 777'
 
