@@ -50,10 +50,16 @@ install_package() {
     local pkg=$1
     local check_cmd=$2
     local override=$3
+    local cask=$4
     if ! command -v $check_cmd &> /dev/null; then
         echo "Installing $pkg..."
         if [ "$PACKAGE_MANAGER" = "brew" ]; then
-            brew install $pkg
+            if [ "$cask" = "true" ]; then
+                brew install --cask $pkg
+            else
+                brew install $pkg
+            fi
+
         else
             sudo apt-get update
             sudo apt-get install -y $pkg
@@ -234,6 +240,12 @@ install_package "tmux" "tmux"
 install_package "1password-cli" "op"
 install_package "git" "git"
 install_package "libnotify-bin" "notify-send"
+install_package "zed" "zed"
+install_package "jetbrains-toolbox" "jetbrains-toolbox" "" "true"
+install_package "wget" "wget"
+install_package "1password" "1password" "" "true"
+install_package "1password-cli" "1password-cli" "" ""
+install_package "fzf" "fzf"
 
 # install_package "fonts-font-awesome" "fonts-font-awesome"
 install_nvm

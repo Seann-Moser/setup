@@ -9,11 +9,10 @@ export GOPATH=$HOME/go
 #export GOROOT="/usr/local/opt/go/libexec"
 export PATH="$PATH:${GOPATH}/bin:${GOROOT}/bin"
 
-export GONOPROXY="github.com/Kochava,git.dev.kochava.com,github.com/Seann-Moser,github.com/HiroCloud"
+export GONOPROXY="github.com/Seann-Moser,github.com/HiroCloud,github.com/Stodge-Inc"
 export GOPROXY="https://proxy.golang.org,direct"
-export GONOSUMDB="github.com/Kochava,git.dev.kochava.com,github.com/Seann-Moser,github.com/HiroCloud"
-export GOPRIVATE="github.com/Kochava,git.dev.kochava.com,github.com/Seann-Moser,github.com/HiroCloud"
+export GONOSUMDB="github.com/Seann-Moser,github.com/HiroCloud,github.com/Stodge-Inc"
+export GOPRIVATE="github.com/Seann-Moser,github.com/HiroCloud,github.com/Stodge-Inc"
 
 
 export PATH="$PATH:$HOME/.cargo/bin"
-

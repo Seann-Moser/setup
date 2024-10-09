@@ -5,6 +5,7 @@ alias cdp='cd ~/projects/github.com/'
 alias cds='cd ~/go/src/github.com/Seann-Moser'
 alias cdh='cd ~/go/src/github.com/HiroCloud'
 alias cdhf='cd ~/go/src/github.com/HiroCloud/k8s-flux'
+alias cdps='cd ~/go/src/github.com/Stodge-Inc/'
 
 alias runAccess='chmod 777'
 
