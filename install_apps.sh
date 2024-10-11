@@ -247,6 +247,7 @@ install_package "1password" "1password" "" "true"
 install_package "1password-cli" "1password-cli" "" ""
 install_package "fzf" "fzf"
 install_package "protobuf" "protogs"
+install_package "golangci-lint" "golangci-lint" "brew"
 
 # install_package "fonts-font-awesome" "fonts-font-awesome"
 install_nvm
