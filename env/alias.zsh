@@ -12,7 +12,7 @@ alias runAccess='chmod 777'
 # ZSH
 alias refresh="source ~/.zshrc"
 
-
+alias kubectl-cleanup-pods='kubectl get pods --all-namespaces | grep -E "Evicted|ContainerStatusUnknown" | awk "{print \$1 \" \" \$2}" | xargs -n2 sh -c "kubectl delete pod \$1 -n \$0"'
 # Docker
 alias dcud='docker compose up -d'
 alias dcub='docker compose up --build'
