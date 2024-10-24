@@ -18,3 +18,6 @@ alias dcud='docker compose up -d'
 alias dcub='docker compose up --build'
 
 alias update='sudo apt-get update && sudo apt-get upgrade && sudo apt-get dist-upgrade && brew update && brew upgrade && flatpak update'
+alias eip='dig +short myip.opendns.com @resolver1.opendns.com'
+
+alias psinit='bash ${HOME}/.oh-my-zsh/custom/psinit.sh'
