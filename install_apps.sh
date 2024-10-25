@@ -172,8 +172,9 @@ install_docker() {
 }
 
 install_tpm() {
-    # Define the TPM directory
+    # Define the TPM and Catppuccin directories
     local tpm_dir="$HOME/.tmux/plugins/tpm"
+    local catppuccin_dir="$HOME/.config/tmux/plugins/catppuccin/tmux"
 
     # Check if TPM is already installed
     if [ -d "$tpm_dir" ]; then
@@ -188,12 +189,32 @@ install_tpm() {
             echo "TPM installed successfully."
         else
             echo "Failed to install TPM."
+            return 1
         fi
-
-        git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-        git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-        git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
     fi
+
+    # Install or update Catppuccin theme for tmux
+    if [ -d "$catppuccin_dir" ]; then
+        echo "Catppuccin theme already exists. Updating..."
+        git -C "$catppuccin_dir" pull
+    else
+        echo "Installing Catppuccin theme for tmux..."
+        mkdir -p ~/.config/tmux/plugins/catppuccin
+        git clone -b v2.0.0 https://github.com/catppuccin/tmux.git "$catppuccin_dir"
+
+        # Check if Catppuccin installation was successful
+        if [ -d "$catppuccin_dir" ]; then
+            echo "Catppuccin theme installed successfully."
+        else
+            echo "Failed to install Catppuccin theme."
+            return 1
+        fi
+    fi
+
+    # Install zsh plugins and theme
+    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 }
 
 
