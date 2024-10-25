@@ -172,9 +172,8 @@ install_docker() {
 }
 
 install_tpm() {
-    # Define the TPM and Catppuccin directories
+    # Define the TPM directory
     local tpm_dir="$HOME/.tmux/plugins/tpm"
-    local catppuccin_dir="$HOME/.config/tmux/plugins/catppuccin/tmux"
 
     # Check if TPM is already installed
     if [ -d "$tpm_dir" ]; then
@@ -193,13 +192,24 @@ install_tpm() {
         fi
     fi
 
-    # Install or update Catppuccin theme for tmux
+    # Install zsh plugins and theme
+    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+}
+
+install_catppuccin() {
+    # Define the Catppuccin directory
+    local catppuccin_dir="$HOME/.config/tmux/plugins/catppuccin/tmux"
+
+    # Check if the Catppuccin theme is already installed
     if [ -d "$catppuccin_dir" ]; then
         echo "Catppuccin theme already exists. Updating..."
         git -C "$catppuccin_dir" pull
     else
+        # Install the Catppuccin theme
         echo "Installing Catppuccin theme for tmux..."
-        mkdir -p ~/.config/tmux/plugins/catppuccin
+        mkdir -p "$HOME/.config/tmux/plugins/catppuccin"
         git clone -b v2.0.0 https://github.com/catppuccin/tmux.git "$catppuccin_dir"
 
         # Check if Catppuccin installation was successful
@@ -210,11 +220,6 @@ install_tpm() {
             return 1
         fi
     fi
-
-    # Install zsh plugins and theme
-    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 }
 
 
@@ -277,7 +282,11 @@ install_nerd_fonts "JetBrainsMono"
 install_nerd_fonts "MartianMono"
 install_nerd_fonts "ProFont"
 install_nerd_fonts "ZedMono"
-install_tpm
+# install_tpm
+# Call the install_catppuccin function to handle the Catppuccin installation
+mkdir -p ~/.config/tmux/plugins/catppuccin
+git clone -b v2.0.0 https://github.com/catppuccin/tmux.git ~/.config/tmux/plugins/catppuccin/tmux
+install_catppuccin
 install_terminal
 
 echo "All specified applications have been checked and installed if necessary."
