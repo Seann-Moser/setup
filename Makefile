@@ -22,7 +22,7 @@ clean-config:
 	fi
 	@if [ -d "$(TMUX_DEST_DIR)" ]; then \
 		echo "Removing old tmux configuration at $(TMUX_DEST_DIR)..."; \
-		rm -rf $(TMUX_DEST_DIR); \
+		rm -rf $(TMUX_DEST_DIR)/tmux.conf; \
 	else \
 		echo "No existing tmux configuration to remove."; \
 	fi

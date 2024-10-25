@@ -282,10 +282,10 @@ install_nerd_fonts "JetBrainsMono"
 install_nerd_fonts "MartianMono"
 install_nerd_fonts "ProFont"
 install_nerd_fonts "ZedMono"
-# install_tpm
+install_tpm
 # Call the install_catppuccin function to handle the Catppuccin installation
-mkdir -p ~/.config/tmux/plugins/catppuccin
-git clone -b v2.0.0 https://github.com/catppuccin/tmux.git ~/.config/tmux/plugins/catppuccin/tmux
+#mkdir -p ~/.config/tmux/plugins/catppuccin
+#git clone -b v2.0.0 https://github.com/catppuccin/tmux.git ~/.config/tmux/plugins/catppuccin/tmux
 install_catppuccin
 install_terminal
 
