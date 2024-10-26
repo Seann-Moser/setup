@@ -79,6 +79,121 @@ install_package() {
     fi
 }
 
+install_k9s_catppuccin_theme() {
+    set -e  # Exit immediately if a command exits with a non-zero status
+
+
+    # Clone the Catppuccin/k9s theme repository
+    echo "Cloning Catppuccin k9s theme repository..."
+    # Define install commands
+    if [ "$UNAME_S" = "Darwin" ]; then
+        OUT="${XDG_CONFIG_HOME:-$HOME/Library/Application Support}/k9s/skins"
+        mkdir -p "$OUT"
+        curl -L https://github.com/catppuccin/k9s/archive/main.tar.gz | tar xz -C "$OUT" --strip-components=2 k9s-main/dist
+    elif [ "$UNAME_S" = "Linux" ]; then
+        OUT="${XDG_CONFIG_HOME:-$HOME/.config}/k9s/skins"
+        mkdir -p "$OUT"
+        curl -L https://github.com/catppuccin/k9s/archive/main.tar.gz | tar xz -C "$OUT" --strip-components=2 k9s-main/dist
+    else
+        echo "Unsupported OS: $UNAME_S"
+        exit 1
+    fi
+
+
+    # Create the k9s config directory if it doesn't exist
+    mkdir -p ~/.k9s
+
+    # Backup existing config.yml if it exists
+    if [ -f ~/.config/k9s/config.yaml ]; then
+        echo "Backing up existing ~/.config/k9s/config.yaml to ~/.config/k9s/config.yaml.backup"
+        cp ~/.config/k9s/config.yaml ~/.config/k9s/config.yml.backup
+    fi
+
+    # Apply the theme configuration
+    if [ -f "$TEMP_DIR/catppuccin-k9s/config.yaml" ]; then
+        echo "Applying Catppuccin theme from repository..."
+        cp "$TEMP_DIR/catppuccin-k9s/config.yaml" ~/.k9s/config.yaml
+    else
+        echo "config.yml not found in the repository. Applying default Catppuccin theme configuration..."
+        cat <<EOF > ~/.config/k9s/config.yaml
+k9s:
+  liveViewAutoRefresh: false
+  screenDumpDir: ${HOME}/.local/state/k9s/screen-dumps
+  refreshRate: 2
+  maxConnRetry: 5
+  readOnly: false
+  noExitOnCtrlC: false
+  ui:
+    skin: catppuccin-mocha
+    enableMouse: false
+    headless: false
+    logoless: false
+    crumbsless: false
+    reactive: false
+    noIcons: false
+    defaultsToFullScreen: false
+  skipLatestRevCheck: false
+  disablePodCounting: false
+  shellPod:
+    image: busybox:1.35.0
+    namespace: default
+    limits:
+      cpu: 100m
+      memory: 100Mi
+  imageScans:
+    enable: false
+    exclusions:
+      namespaces: []
+      labels: {}
+  logger:
+    tail: 100
+    buffer: 5000
+    sinceSeconds: -1
+    textWrap: false
+    showTime: false
+  thresholds:
+    cpu:
+      critical: 90
+      warn: 70
+    memory:
+      critical: 90
+      warn: 70
+EOF
+        echo "Default Catppuccin theme configuration applied."
+    fi
+
+    # Clean up temporary directory
+    rm -rf "$TEMP_DIR"
+
+    # Set the K9S_STYLE environment variable
+    SHELL_PROFILE=""
+    if [ -n "$ZSH_VERSION" ]; then
+        SHELL_PROFILE="$HOME/.zshrc"
+    elif [ -n "$BASH_VERSION" ]; then
+        SHELL_PROFILE="$HOME/.bashrc"
+    else
+        # Default to .bashrc if shell is not bash or zsh
+        SHELL_PROFILE="$HOME/.bashrc"
+    fi
+
+    # Check if K9S_STYLE is already set in the profile
+    if grep -q 'export K9S_STYLE=' "$SHELL_PROFILE"; then
+        echo "K9S_STYLE is already set in $SHELL_PROFILE. Updating it to 'catppuccin'."
+        sed -i.bak '/export K9S_STYLE=/c\export K9S_STYLE="catppuccin"' "$SHELL_PROFILE"
+    else
+        echo 'export K9S_STYLE="catppuccin"' >> "$SHELL_PROFILE"
+    fi
+
+    # Inform the user to reload their shell
+    echo "Please reload your shell or run 'source $SHELL_PROFILE' to apply the changes."
+
+    echo "k9s with Catppuccin theme installed successfully."
+}
+
+# To use the function, simply copy and paste it into your terminal, then run:
+# install_k9s_catppuccin_theme
+
+
 # Function to install nvm
 install_nvm() {
     if [ -d "$HOME/.nvm" ]; then
@@ -275,6 +390,7 @@ install_package "fzf" "fzf"
 install_package "protobuf" "protogs"
 install_package "golangci-lint" "golangci-lint" "brew"
 
+
 # install_package "fonts-font-awesome" "fonts-font-awesome"
 install_nvm
 install_docker
@@ -283,8 +399,9 @@ install_nerd_fonts "MartianMono"
 install_nerd_fonts "ProFont"
 install_nerd_fonts "ZedMono"
 install_tpm
+install_k9s_catppuccin_theme
 # Call the install_catppuccin function to handle the Catppuccin installation
-#mkdir -p ~/.config/tmux/plugins/catppuccin
+#mkdir -p ~/.config/tmux/plugins/catppuccin 
 #git clone -b v2.0.0 https://github.com/catppuccin/tmux.git ~/.config/tmux/plugins/catppuccin/tmux
 install_catppuccin
 install_terminal
